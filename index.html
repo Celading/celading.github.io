@@ -5,13 +5,14 @@
 	<meta name=renderer content=webkit>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<style>
-		body{
+		body {
 			margin: 0;
 			padding: 0;
 			overflow-y: hidden;
 			overflow-x: hidden;
 		}
-		iframe{
+
+		iframe {
 			width: 100%;
 			height: 100%;
 			border: 2px dotted #00000023;
@@ -20,7 +21,63 @@
 </head>
 
 <body>
-	<iframe sandbox="allow-scripts" width="100%" height="100%" src="http://192.168.0.66/"></iframe>
+	<iframe id="section" sandbox="allow-scripts" width="100%" height="100%" src="http://192.168.0.66/"></iframe>
 </body>
+<script>
+	var iframe1 = document.getElementById('section');
+	iframe1.addEventListener('load', function () {
+		iframe1.style.visibility = 'hidden';
+		requestAnimationFrame(function () {
+			iframe1.style.visibility = 'visible';
+		});
+	})
+		(function () {
+			'use strict'
+			var devtools = {
+				open: false,
+				orientation: null
+			}
+			var threshold = 160
+			var emitEvent = function (state, orientation) {
+				window.dispatchEvent(new CustomEvent('devtoolschange', {
+					detail: {
+						open: state,
+						orientation: orientation
+					}
+				}))
+			}
+			setInterval(function () {
+				var widthThreshold = window.outerWidth - window.innerWidth > threshold
+				var heightThreshold = window.outerHeight - window.innerHeight > threshold
+				var orientation = widthThreshold ? 'vertical' : 'horizontal'
+
+				if (!(heightThreshold && widthThreshold) &&
+					((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)) {
+					if (!devtools.open || devtools.orientation !== orientation) {
+						emitEvent(true, orientation)
+					}
+					devtools.open = true
+					devtools.orientation = orientation
+				} else {
+					if (devtools.open) {
+						emitEvent(false, null)
+					}
+					devtools.open = false
+					devtools.orientation = null
+				}
+			}, 500)
+			if (typeof module !== 'undefined' && module.exports) {
+				module.exports = devtools
+			} else {
+				window.devtools = devtools
+			}
+		})();
+
+	window.addEventListener('devtoolschange', function (e) {
+		if (e.detail.open) {
+			document.getElementsByTagName('body')[0].innerHTML = '<h1>警告：</h1><h3>请登录后再进行后台编辑</h3><h5 style="color:#999">code: 0xc000007125</h5>';
+		}
+	})
+</script>
 
 </html>
