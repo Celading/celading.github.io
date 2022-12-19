@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="en">
+
+</html>
+
 <head>
 	<title>无主之地</title>
 	<meta charset="UTF-8">
@@ -10,8 +13,12 @@
 		body {
 			margin: 0;
 			padding: 0;
+			width: 100vw;
+			height: 100vh;
 			overflow-y: hidden;
 			overflow-x: hidden;
+			animation: delayAni 2s;
+			transition-timing-function: cubic-bezier(.46, 1, .28, .09);
 		}
 
 		iframe {
@@ -19,61 +26,74 @@
 			height: 100%;
 			border: 2px dotted #00000023;
 		}
+
+		@keyframes delayAni {
+			0% {
+				opacity: 0;
+			}
+
+			20% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
 	</style>
 </head>
 
 <body>
-	<iframe id="section" sandbox="allow-scripts" width="100%" height="100%" src="/ee/"></iframe>
+	<iframe id="section" sandbox="allow-script" width="100%" height="100%" src="http://192.168.0.66"></iframe>
 </body>
 <script>
-	var iframe1 = document.getElementById('section');
-	iframe1.addEventListener('load', function () {
-		iframe1.style.visibility = 'hidden';
-		requestAnimationFrame(function () {
-			iframe1.style.visibility = 'visible';
-		});
-	})
-		(function () {
-			'use strict'
-			var devtools = {
-				open: false,
-				orientation: null
-			}
-			var threshold = 160
-			var emitEvent = function (state, orientation) {
-				window.dispatchEvent(new CustomEvent('devtoolschange', {
-					detail: {
-						open: state,
-						orientation: orientation
-					}
-				}))
-			}
-			setInterval(function () {
-				var widthThreshold = window.outerWidth - window.innerWidth > threshold
-				var heightThreshold = window.outerHeight - window.innerHeight > threshold
-				var orientation = widthThreshold ? 'vertical' : 'horizontal'
+	setTimeout(function () {
+		document.getElementById('section').src = document.getElementById('section').src
+	}, 876);
 
-				if (!(heightThreshold && widthThreshold) &&
-					((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)) {
-					if (!devtools.open || devtools.orientation !== orientation) {
-						emitEvent(true, orientation)
-					}
-					devtools.open = true
-					devtools.orientation = orientation
-				} else {
-					if (devtools.open) {
-						emitEvent(false, null)
-					}
-					devtools.open = false
-					devtools.orientation = null
+</script>
+<script>
+	(function () {
+		'use strict'
+		var devtools = {
+			open: false,
+			orientation: null
+		}
+		var threshold = 160
+		var emitEvent = function (state, orientation) {
+			window.dispatchEvent(new CustomEvent('devtoolschange', {
+				detail: {
+					open: state,
+					orientation: orientation
 				}
-			}, 500)
-			if (typeof module !== 'undefined' && module.exports) {
-				module.exports = devtools
+			}))
+		}
+		setInterval(function () {
+			var widthThreshold = window.outerWidth - window.innerWidth > threshold
+			var heightThreshold = window.outerHeight - window.innerHeight > threshold
+			var orientation = widthThreshold ? 'vertical' : 'horizontal'
+
+			if (!(heightThreshold && widthThreshold) &&
+				((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)) {
+				if (!devtools.open || devtools.orientation !== orientation) {
+					emitEvent(true, orientation)
+				}
+				devtools.open = true
+				devtools.orientation = orientation
 			} else {
-				window.devtools = devtools
+				if (devtools.open) {
+					emitEvent(false, null)
+				}
+				devtools.open = false
+				devtools.orientation = null
 			}
-		})();
+		}, 500)
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = devtools
+		} else {
+			window.devtools = devtools
+		}
+	})();
 
 	window.addEventListener('devtoolschange', function (e) {
 		if (e.detail.open) {
