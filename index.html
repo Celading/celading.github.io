@@ -47,9 +47,13 @@
 	<iframe id="section" sandbox="allow-script" width="100%" height="100%" src="http://192.168.0.66"></iframe>
 </body>
 <script>
-	setTimeout(function () {
-		document.getElementById('section').src = document.getElementById('section').src
-	}, 876);
+	var protocolStr = document.location.protocol;
+	if (protocolStr == "http:") {
+		document.title="无主之地 - Cloudyflame"
+	}
+	else {
+		var newWeb=window.open('http://ccvcc.cc/?byHttps');
+	}
 
 </script>
 <script>
