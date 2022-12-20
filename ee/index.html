@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>无主之地-2</title>
+	<title>无主之地 - EE</title>
 	<meta name=renderer content=webkit>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<style>
@@ -21,6 +21,16 @@
 
 <body>
 	<iframe sandbox="allow-scripts" width="100%" height="100%" src="http://192.168.0.66/ee"></iframe>
+	<script>
+		var protocolStr = document.location.protocol;
+		if (protocolStr == "http:") {
+			document.title="无主之地EE - Cloudyflame"
+		}
+		else {
+			window.location.replace('http://ccvcc.cc/ee/?byHttps');
+		}
+	
+	</script>
 </body>
 
 </html>
