@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>MainPage - Cin</title>
+	<style>
+		body {
+			--pageMinSize: 10px;
+			--backGColor: #CCC;
+		}
+
+		@media (min-width: 100px) {
+			body {
+				--headerPadding: 0.3em 0;
+				--contentPadding: 0 20px;
+				--easyWidth: repeat(4, 1fr);
+				--inputWidth: auto;
+				--inputPadding: 1em;
+				--inputBtnPadding: 1em 1.5em 1em 1.5em;
+				--cardFtSize: 12px;
+				--cardPadding: 5em 0 1em 0;
+			}
+		}
+
+		@media (min-width: 862px) {
+			body {
+				--easyWidth: repeat(8, 1fr);
+			}
+		}
+
+		@media (min-width: 1200px) {
+			body {
+				--headerPadding: 1em 0;
+				--contentPadding: 0 50px;
+				--easyWidth: repeat(10, 1fr);
+				--inputWidth: 28em;
+				--inputPadding: 1.2em 10em;
+				--inputBtnPadding: 1.2em 1.8em 1.2em 1.8em;
+				--cardFtSize: 18px;
+				--cardPadding: 5em 0 1em 0;
+			}
+		}
+
+		:visited {
+			text-decoration-color: rgba(0, 0, 0, 0);
+		}
+
+		body {
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+			font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, noto sans, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol, noto color emoji;
+			overflow-y: hidden;
+		}
+
+		div,
+		span,
+		a,
+		li,
+		button {
+			transition: all 0.3s cubic-bezier(0.57, 0.45, 0, 0.98);
+		}
+
+		li {
+			user-select: none;
+			list-style: none;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		.app {
+			height: 100vh;
+			width: 100%;
+			background: #FAFAFA;
+			display: grid;
+			grid: 7% 93% 0% /100%
+		}
+
+		#header {
+			width: 100%;
+			background: #1d478a;
+			border-bottom: #174082 solid 3px;
+			display: flex;
+			color: #CCC;
+			font-weight: 600;
+			padding: var(--headerPadding);
+		}
+
+		#content {
+			background-color: #CCC;
+			padding: var(--contentPadding);
+			text-align: center;
+			z-index: 1;
+		}
+
+		footer {
+			position: fixed;
+			bottom: 0;
+			padding: 12px 12px;
+			color: rgba(0, 0, 0, 0.5);
+			font-size: var(--pageMinSize);
+			text-align: left;
+			z-index: 1001;
+		}
+
+		footer h3,
+		footer h4,
+		footer h5,
+		footer h6 {
+			margin: -0.2em;
+		}
+
+		footer h5 {
+			margin-left: -0.7em;
+			color: rgba(0, 0, 0, 0.2);
+		}
+
+		footer h5 a {
+			color: rgba(0, 0, 0, 0.3);
+		}
+
+		.Menus {
+			flex: 1;
+			display: flex;
+			padding: 0;
+		}
+
+		.Menu {
+			display: flex;
+			margin: 0 1.3em;
+			align-items: center;
+		}
+
+		.MenuSetting {
+			font-size: 10px;
+			margin-right: 5vw;
+		}
+
+		.InputSearch {
+			margin: 2em 0;
+			display: flex;
+			justify-content: center;
+			z-index: 0;
+		}
+
+		.InputSearch:hover,
+		.InputSearch:active {
+			z-index: 10;
+		}
+
+		.InputExc {
+			position: relative;
+			z-index: 1;
+		}
+
+		#InputSearchQuick {
+			position: relative;
+			display: flex;
+			flex-flow: row wrap;
+			padding: 0;
+			width: 100%;
+			margin-top: -1.5em;
+			background: linear-gradient(rgba(168, 168, 168, 0) 6%, #A8A8A8);
+			line-height: 6em;
+			z-index: -1;
+		}
+
+		#InputSearchQuick:hover {}
+
+		#InputSearchQuick li {
+			padding: 0 0.5em;
+			height: 4.5em;
+		}
+
+		.InputSearch input {
+			border: none;
+			background-color: #B1B1B1;
+			border-radius: 3em 0.3em 0.3em 3em;
+			padding: 1.2em;
+			width: var(--inputWidth);
+			border: rgba(0, 0, 0, 0) solid 3px;
+			outline: none;
+		}
+
+		.InputSearch input:focus-visible,
+		.InputSearch input:active {
+			border: rgba(0, 0, 0, 0.667) solid 3px;
+			outline: none;
+		}
+
+		.InputSearch button {
+			color: #FFFFFF;
+			border-radius: 0.3em 3em 3em 0.3em;
+			border: none;
+			padding: 1.2em;
+			border: rgba(0, 0, 0, 0) solid 3px;
+			background-color: #5F5F5F;
+		}
+
+		.InputSearch button:hover {
+			background-color: #555;
+		}
+
+		.InputSearch button:active {
+			background-color: #222;
+		}
+
+		.FavCards {
+			display: grid;
+			padding: 0;
+			grid-column: span 4;
+			grid-template-columns: var(--easyWidth);
+			gap: 0.5em;
+		}
+
+		.FavCards li {
+			background-color: #efefef;
+			color: #333;
+			padding: var(--cardPadding);
+			text-align: center;
+			list-style: none;
+			font-size: var(--cardFtSize);
+			border-radius: 0.3em;
+			min-height: 2.8em;
+		}
+
+		.FavCards li:hover {
+			color: #222;
+			background-color: #FFFFFF;
+			cursor: alias;
+		}
+
+		.FavCards li:active {
+			background-color: #E5E5E5;
+		}
+
+		.FavCards li:visited {
+			background-color: #F1F1F1;
+		}
+	</style>
+</head>
+
+<body>
+	<section class="app">
+		<header id="header">
+			<ul class="Menus">
+				<li class="Menu">主页</li>
+				<li class="Menu">主机端</li>
+			</ul>
+			<span class="Menu MenuSetting">设置</span>
+		</header>
+
+		<main id="content">
+			<div class="InputSearch">
+				<div class="InputExc">
+					<input type="text" autofocus />
+					<button>√</button>
+					<ul id="InputSearchQuick">
+						<li>Bing</li>
+						<li>Baidu</li>
+						<li>Google</li>
+						<li>Taobao</li>
+						<li>JD.com</li>
+					</ul>
+				</div>
+			</div>
+
+			<ul id="FavCards" class="FavCards">
+				<li id="link-1" onclick="linkClick()" class="Card">Nature</li>
+				<li id="link-2" onclick="linkClick()" class="Card">the Lancet</li>
+				<li id="link-3" onclick="linkClick()" class="Card">Code WEB</li>
+				<li id="link-4" onclick="linkClick()" class="Card">Hallow Library</li>
+				<li id="link-5" onclick="linkClick()" class="Card">Baidu NOW</li>
+				<li id="link-6" onclick="linkClick()" class="Card CardEmpty"></li>
+				<li id="link-7" onclick="linkClick()" class="Card CardEmpty"></li>
+			</ul>
+
+		</main>
+
+		<footer id="footer">
+			<h3>©CCVCCCC </h3>
+			<h6>for MobilePage</h6>
+			<h5>Thanks for <a href="github.com">Github</a></h5>
+		</footer>
+	</section>
+</body>
+<script>
+
+	const FavDataType = {
+		LinkName: String,
+		Link: String
+	}
+
+	var favData = {
+		"Nature": "https://www.nature.com",
+		"the Lancet": "https://thelancet.com",
+		"Code WEB": "https://vscode.dev",
+		"Hallow Library": "https://bk.hallowlib.org"
+	}
+
+
+
+	//console.log(FavDatas.length);
+	//console.log("Title is," + FavDatas[i] + " | Link is," + FavDatasValue[i] + "\n");
+
+
+	/* Only for ES2017+
+	const FavDatas = Object.keys(favData);
+	const FavDatasValue = Object.values(favData);
+
+	function linkClick(e) {
+		var thislinkname = event.target.id
+		var thislinkid = thislinkname.slice(5, 6)
+		//console.log(thislinkname + '|' + thislinkid);
+
+		window.open(FavDatasValue[thislinkid])
+	}
+	*/
+
+	// links-Onclick support IE
+	var FavJson = JSON.stringify(favData).split('"').join('');
+	var FavDatas = FavJson.substring(1, FavJson.length - 1).split(',');
+	let FavDatasValue = []
+
+	for (var i = 0; i < FavDatas.length; i++) {
+		//以':'分割数组，并获取各项值
+		var FavDataName = FavDatas[i].split(':')[0];
+		var FavDataLink = "http" + FavDatas[i].split('http')[1];
+		FavDatasValue.push(FavDataLink)
+		//console.log(FavDataName + ' | ' + FavDataLink);
+	}
+
+	function reFreshFavData() {
+		let favDataHTML = ""
+		for (var i = 0; i < FavDatas.length; i++) {
+			//以':'分割数组，并获取各项值
+			var FavDataName = FavDatas[i].split(':')[0];
+			var FavDataLink = "http" + FavDatas[i].split('http')[1];
+			FavDatasValue.push(FavDataLink)
+			console.log(FavDataName + ' | ' + FavDataLink);
+			
+			//<li id="link-1" onclick="linkClick()" class="Card">Nature</li>
+			favDataHTML += '<li id="link-' + i + '"onclick="linkClick()" class="Card">' + FavDataName + '</li>';
+		}
+		document.getElementById('FavCards').innerHTML = favDataHTML;
+	}
+	reFreshFavData();
+
+	function linkClick(e) {
+		var thislinkname = event.target.id
+		var thislinkid = thislinkname.slice(5, 6)
+
+		window.open(FavDatasValue[thislinkid])
+	}
+
+
+	// function
+	function ping(ip = String, time = Number) {
+		var histime = new Array();
+		const histimes = new Map();
+		var pingDatas = new XMLHttpRequest();
+		var time1, time2, time3
+		pingDatas.open('GET', ip, true);
+		for (let iping = Number = 0; iping < time; iping++) {
+			time1 = new Date().getTime()
+			pingDatas.onreadystatechange = function () {
+				if (pingDatas === 4 && pingDatas.status === 200)
+					console.log("Get'sRespone: 200");
+			}
+			pingDatas.send();
+			time2 = new Date().getTime()
+			time3 = time2 - time1
+			console.log(time3);
+			histime.push(time3)
+			histimes.set(iping + 1, time3)
+		}
+		var timesAvg = histime.reduce((total, num) => total + num, 0) / histime.length;
+		console.log("pingsData is: " + histimes + "\n" + "Ping: " + timesAvg + "ms");
+	}
+
+
+	function getPage() {
+		var tempdata = new XMLHttpRequest();
+		tempdata.open('GET', "/TMP0/", true);
+		tempdata.onreadystatechange = function () {
+			if (tempdata === 4 && tempdata.status === 200)
+				console.log("Get'sRespone: 200");
+			console.log(tempdata.response);
+		}
+		//tempdata.send();
+	}
+
+	(function () {
+			'use strict'
+			var devtools = {
+				open: false,
+				orientation: null
+			}
+			var threshold = 160
+			var emitEvent = function (state, orientation) {
+				window.dispatchEvent(new CustomEvent('devtoolschange', {
+					detail: {
+						open: state,
+						orientation: orientation
+					}
+				}))
+			}
+			setInterval(function () {
+				var widthThreshold = window.outerWidth - window.innerWidth > threshold
+				var heightThreshold = window.outerHeight - window.innerHeight > threshold
+				var orientation = widthThreshold ? 'vertical' : 'horizontal'
+
+				if (!(heightThreshold && widthThreshold) &&
+					((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)) {
+					if (!devtools.open || devtools.orientation !== orientation) {
+						emitEvent(true, orientation)
+					}
+					devtools.open = true
+					devtools.orientation = orientation
+				} else {
+					if (devtools.open) {
+						emitEvent(false, null)
+					}
+					devtools.open = false
+					devtools.orientation = null
+				}
+			}, 500)
+			if (typeof module !== 'undefined' && module.exports) {
+				module.exports = devtools
+			} else {
+				window.devtools = devtools
+			}
+		})();
+
+		window.addEventListener('devtoolschange', function (e) {
+			if (e.detail.open) {
+				document.getElementsByTagName('body')[0].innerHTML = '<h1>警告：</h1><h3>请登录后再进行后台编辑</h3><h5 style="color:#999">code: 0xc000007125</h5>';
+			}
+		})
+
+
+</script>
+
+</html>
